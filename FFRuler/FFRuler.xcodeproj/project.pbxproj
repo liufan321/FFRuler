@@ -12,6 +12,7 @@
 		C2E92B261D61A8E70037DE79 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C2E92B251D61A8E70037DE79 /* ViewController.m */; };
 		C2E92B291D61A8E70037DE79 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2E92B271D61A8E70037DE79 /* Main.storyboard */; };
 		C2E92B2B1D61A8E70037DE79 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2E92B2A1D61A8E70037DE79 /* Assets.xcassets */; };
+		C2E92B5B1D61B1710037DE79 /* FFRulerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = C2E92B5A1D61B1710037DE79 /* FFRulerControl.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,8 @@
 		C2E92B281D61A8E70037DE79 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C2E92B2A1D61A8E70037DE79 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C2E92B2F1D61A8E70037DE79 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C2E92B591D61B1710037DE79 /* FFRulerControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFRulerControl.h; sourceTree = "<group>"; };
+		C2E92B5A1D61B1710037DE79 /* FFRulerControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFRulerControl.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +59,7 @@
 		C2E92B1D1D61A8E70037DE79 /* FFRuler */ = {
 			isa = PBXGroup;
 			children = (
+				C2E92B351D61AF090037DE79 /* FFRulerControl */,
 				C2E92B211D61A8E70037DE79 /* AppDelegate.h */,
 				C2E92B221D61A8E70037DE79 /* AppDelegate.m */,
 				C2E92B241D61A8E70037DE79 /* ViewController.h */,
@@ -74,6 +78,15 @@
 				C2E92B1F1D61A8E70037DE79 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C2E92B351D61AF090037DE79 /* FFRulerControl */ = {
+			isa = PBXGroup;
+			children = (
+				C2E92B591D61B1710037DE79 /* FFRulerControl.h */,
+				C2E92B5A1D61B1710037DE79 /* FFRulerControl.m */,
+			);
+			path = FFRulerControl;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -147,6 +160,7 @@
 			files = (
 				C2E92B261D61A8E70037DE79 /* ViewController.m in Sources */,
 				C2E92B231D61A8E70037DE79 /* AppDelegate.m in Sources */,
+				C2E92B5B1D61B1710037DE79 /* FFRulerControl.m in Sources */,
 				C2E92B201D61A8E70037DE79 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
