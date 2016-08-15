@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  CodeDemoViewController.h
 //  FFRuler
 //
 //  Created by 刘凡 on 2016/8/15.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface CodeDemoViewController : UIViewController
 
 @end
-
