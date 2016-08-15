@@ -48,7 +48,57 @@
  */
 #define kIndicatorDefaultLength     40.0
 
-@implementation FFRulerControl
+@implementation FFRulerControl {
+    UIScrollView *_scrollView;
+    UIImageView *_rulerImageView;
+    UIView *_indicatorView;
+}
+
+#pragma mark - 构造函数
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self setupUI];
+    }
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)coder {
+    self = [super initWithCoder:coder];
+    if (self) {
+        [self setupUI];
+    }
+    return self;
+}
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+}
+
+- (void)setupUI {
+    // 默认水平方向滚动
+    _verticalScroll = NO;
+    
+    // 滚动视图
+    _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
+    
+    _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _scrollView.showsVerticalScrollIndicator = NO;
+    _scrollView.showsHorizontalScrollIndicator = NO;
+    
+    [self addSubview:_scrollView];
+    
+    // 标尺图像
+    _rulerImageView = [[UIImageView alloc] init];
+    
+    [_scrollView addSubview:_rulerImageView];
+    
+    // 指示器视图
+    _indicatorView = [[UIView alloc] init];
+    _indicatorView.backgroundColor = self.indicatorColor;
+    
+    [self addSubview:_indicatorView];
+}
 
 #pragma mark - 属性默认值
 - (CGFloat)minorScaleSpacing {
