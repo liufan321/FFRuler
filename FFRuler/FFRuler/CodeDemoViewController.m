@@ -24,6 +24,10 @@
     [self.view addSubview:ruler];
     
     ruler.backgroundColor = [UIColor colorWithWhite:0.93 alpha:1];
+    
+    ruler.minValue = 10;
+    ruler.maxValue = 100;
+    ruler.valueStep = 5;
 }
 
 @end

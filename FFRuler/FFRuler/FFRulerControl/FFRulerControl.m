@@ -73,19 +73,35 @@
 
 - (void)didMoveToWindow {
     [super didMoveToWindow];
-    
-    UIImage *image = [self rulerImage];
-    
-    if (image) {
-        _rulerImageView.image = image;
-        _rulerImageView.backgroundColor = [UIColor yellowColor];
-        
-        [_rulerImageView sizeToFit];
-        _scrollView.contentSize = _rulerImageView.image.size;
-    }
+ 
+    [self reloadRuler];
 }
 
 #pragma mark - 绘制标尺相关方法
+/**
+ * 刷新标尺
+ */
+- (void)reloadRuler {
+    UIImage *image = [self rulerImage];
+    
+    if (image == nil) {
+        return;
+    }
+    
+    _rulerImageView.image = image;
+    _rulerImageView.backgroundColor = [UIColor yellowColor];
+    
+    [_rulerImageView sizeToFit];
+    _scrollView.contentSize = _rulerImageView.image.size;
+    
+    // 水平标尺靠下对齐
+    if (!_verticalScroll) {
+        CGRect rect = _rulerImageView.frame;
+        rect.origin.y = _scrollView.bounds.size.height - _rulerImageView.image.size.height;
+        _rulerImageView.frame = rect;
+    }
+}
+
 /**
  * 生成标尺图像
  */
@@ -153,6 +169,21 @@
     
     UIGraphicsEndImageContext();
     
+    // 3. 旋转图像
+    if (!_verticalScroll) {
+        return result;
+    }
+
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(rect.size.height, rect.size.width), NO, 0);
+    CGContextRotateCTM(UIGraphicsGetCurrentContext(), M_PI_2);
+    CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0, -result.size.height);
+
+    [result drawInRect:rect];
+
+    result = UIGraphicsGetImageFromCurrentImageContext();
+
+    UIGraphicsEndImageContext();
+
     return result;
 }
 
