@@ -17,6 +17,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    FFRulerControl *ruler = [[FFRulerControl alloc] initWithFrame:CGRectMake(0, 0, 300, 120)];
+    ruler.center = self.view.center;
+    
+    [self.view addSubview:ruler];
+    
+    ruler.backgroundColor = [UIColor colorWithWhite:0.93 alpha:1];
 }
 
 @end
