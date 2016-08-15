@@ -98,9 +98,10 @@
     }
     
     // 水平方向绘制图像的大小
-#warning 临时高度
-    CGFloat height = 80;
-    CGRect rect = CGRectMake(0, 0, steps * self.minorScaleSpacing, height);
+    CGSize textSize = [self maxValueTextSize];
+    CGFloat height = self.majorScaleLength + textSize.height + 2 * self.minorScaleSpacing;
+    CGFloat startX = textSize.width;
+    CGRect rect = CGRectMake(0, 0, steps * self.minorScaleSpacing + 2 * startX, height);
     
     // 2. 绘制图像
     UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0);
@@ -111,7 +112,7 @@
     for (NSInteger i = _minValue; i <= _maxValue; i += _valueStep) {
         
         // 绘制主刻度
-        CGFloat x = (i - _minValue) / _valueStep * self.minorScaleSpacing * 10;
+        CGFloat x = (i - _minValue) / _valueStep * self.minorScaleSpacing * 10 + startX;
         [path moveToPoint:CGPointMake(x, height)];
         [path addLineToPoint:CGPointMake(x, height - self.majorScaleLength)];
         
@@ -132,6 +133,22 @@
     [self.scaleColor set];
     [path stroke];
     
+    // 2> 绘制刻度值
+    NSDictionary *strAttributes = [self scaleTextAttributes];
+
+    for (NSInteger i = _minValue; i <= _maxValue; i += _valueStep) {
+        NSString *str = @(i).description;
+        
+        CGRect strRect = [str boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT)
+                                           options:NSStringDrawingUsesLineFragmentOrigin
+                                        attributes:strAttributes
+                                           context:nil];
+        strRect.origin.x = (i - _minValue) / _valueStep * self.minorScaleSpacing * 10 + startX - strRect.size.width * 0.5;
+        strRect.origin.y = 8;
+        
+        [str drawInRect:strRect withAttributes:strAttributes];
+    }
+    
     UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
     
     UIGraphicsEndImageContext();
@@ -150,28 +167,31 @@
     
     return (value - _minValue) / _valueStep * 10;
 }
-//
-///**
-// * 以水平绘制方向计算 `最大数值的文字` 尺寸
-// */
-//- (CGSize)maxValueTextSize {
-//    
-//    NSString *scaleText = @(self.maxValue).description;
-//    
-//    return [scaleText boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT)
-//                                   options:NSStringDrawingUsesLineFragmentOrigin
-//                                attributes:[self scaleTextAttributes]
-//                                   context:nil].size;
-//}
-//
-//- (NSDictionary *)scaleTextAttributes {
-//    
-//    CGFloat fontSize = self.scaleFontSize * [UIScreen mainScreen].scale * 0.5;
-//    
-//    return @{NSForegroundColorAttributeName: self.scaleFontColor,
-//             NSFontAttributeName: [UIFont boldSystemFontOfSize:fontSize]};
-//}
-//
+
+/**
+ * 以水平绘制方向计算 `最大数值的文字` 尺寸
+ */
+- (CGSize)maxValueTextSize {
+    
+    NSString *scaleText = @(self.maxValue).description;
+    
+    return [scaleText boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT)
+                                   options:NSStringDrawingUsesLineFragmentOrigin
+                                attributes:[self scaleTextAttributes]
+                                   context:nil].size;
+}
+
+/**
+ * 文本属性字典
+ */
+- (NSDictionary *)scaleTextAttributes {
+    
+    CGFloat fontSize = self.scaleFontSize * [UIScreen mainScreen].scale * 0.5;
+    
+    return @{NSForegroundColorAttributeName: self.scaleFontColor,
+             NSFontAttributeName: [UIFont boldSystemFontOfSize:fontSize]};
+}
+
 #pragma mark - 设置界面
 - (void)setupUI {
     // 默认水平方向滚动
