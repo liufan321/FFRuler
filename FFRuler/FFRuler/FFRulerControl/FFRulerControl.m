@@ -48,6 +48,10 @@
  */
 #define kIndicatorDefaultLength     40.0
 
+@interface FFRulerControl() <UIScrollViewDelegate>
+
+@end
+
 @implementation FFRulerControl {
     UIScrollView *_scrollView;
     UIImageView *_rulerImageView;
@@ -104,6 +108,49 @@
 #pragma mark - 设置属性
 - (void)setIndicatorColor:(UIColor *)indicatorColor {
     _indicatorView.backgroundColor = indicatorColor;
+}
+
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
+    
+    CGFloat spacing = self.minorScaleSpacing;
+    CGSize size = self.bounds.size;
+    CGSize textSize = [self maxValueTextSize];
+    
+    if (_verticalScroll) {
+        CGFloat offset = targetContentOffset->y + size.height * 0.5 - textSize.width;
+        NSInteger steps = (NSInteger)(offset / spacing + 0.5);
+        
+        targetContentOffset->y = -(size.height * 0.5 - textSize.width - steps * spacing) - 0.5;
+    } else {
+        CGFloat offset = targetContentOffset->x + size.width * 0.5 - textSize.width;
+        NSInteger steps = (NSInteger)(offset / spacing + 0.5);
+        
+        targetContentOffset->x = -(size.width * 0.5 - textSize.width - steps * spacing) - 0.5;
+    }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    CGFloat spacing = self.minorScaleSpacing;
+    CGSize size = self.bounds.size;
+    CGSize textSize = [self maxValueTextSize];
+    
+    CGFloat offset = 0;
+    if (_verticalScroll) {
+        offset = scrollView.contentOffset.y + size.height * 0.5 - textSize.width;
+    } else {
+        offset = scrollView.contentOffset.x + size.width * 0.5 - textSize.width;
+    }
+    
+    NSInteger steps = (NSInteger)(offset / spacing + 0.5);
+    CGFloat value = _minValue + steps * _valueStep / 10.0;
+    
+    if (value != _selectedValue && (value >= _minValue && value <= _maxValue)) {
+        _selectedValue = value;
+        
+        [self sendActionsForControlEvents:UIControlEventValueChanged];
+    }
 }
 
 #pragma mark - 绘制标尺相关方法
@@ -265,6 +312,8 @@
     _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _scrollView.showsVerticalScrollIndicator = NO;
     _scrollView.showsHorizontalScrollIndicator = NO;
+    
+    _scrollView.delegate = self;
     
     [self addSubview:_scrollView];
     

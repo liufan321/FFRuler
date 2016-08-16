@@ -10,13 +10,18 @@
 #import "FFRulerControl.h"
 
 @interface IBDemoViewController ()
-
+@property (weak, nonatomic) IBOutlet UILabel *heightLabel;
+@property (weak, nonatomic) IBOutlet UILabel *weightLabel;
 @end
 
 @implementation IBDemoViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (IBAction)heightChanged:(FFRulerControl *)sender {
+    _heightLabel.text = [NSString stringWithFormat:@"身高: %.02f cm", sender.selectedValue];
+}
+
+- (IBAction)weightChanged:(FFRulerControl *)sender {
+    _weightLabel.text = [NSString stringWithFormat:@"体重: %.02f kg", sender.selectedValue];
 }
 
 @end
