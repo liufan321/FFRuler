@@ -77,7 +77,7 @@
 
 - (void)didMoveToWindow {
     [super didMoveToWindow];
- 
+    
     [self reloadRuler];
 }
 
@@ -110,6 +110,33 @@
     _indicatorView.backgroundColor = indicatorColor;
 }
 
+- (void)setSelectedValue:(CGFloat)selectedValue {
+    if (selectedValue < _minValue || selectedValue > _maxValue || _valueStep <= 0) {
+        return;
+    }
+    
+    _selectedValue = selectedValue;
+    [self sendActionsForControlEvents:UIControlEventValueChanged];
+    
+    CGFloat spacing = self.minorScaleSpacing;
+    CGSize size = self.bounds.size;
+    CGSize textSize = [self maxValueTextSize];
+    CGFloat offset = 0;
+    
+    // 计算偏移量
+    CGFloat steps = [self stepsWithValue:selectedValue];
+    
+    if (_verticalScroll) {
+        offset = size.height * 0.5 - textSize.width - steps * spacing;
+        
+        _scrollView.contentOffset = CGPointMake(0, -offset);
+    } else {
+        offset = size.width * 0.5 - textSize.width - steps * spacing;
+        
+        _scrollView.contentOffset = CGPointMake(-offset, 0);
+    }
+}
+
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
     
@@ -131,6 +158,10 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
+    if (!scrollView.isDragging) {
+        return;
+    }
     
     CGFloat spacing = self.minorScaleSpacing;
     CGSize size = self.bounds.size;
@@ -176,6 +207,9 @@
         rect.origin.y = _scrollView.bounds.size.height - _rulerImageView.image.size.height;
         _rulerImageView.frame = rect;
     }
+    
+    // 更新初始值
+    self.selectedValue = _selectedValue;
 }
 
 /**
@@ -227,7 +261,7 @@
     
     // 2> 绘制刻度值
     NSDictionary *strAttributes = [self scaleTextAttributes];
-
+    
     for (NSInteger i = _minValue; i <= _maxValue; i += _valueStep) {
         NSString *str = @(i).description;
         
@@ -249,17 +283,17 @@
     if (!_verticalScroll) {
         return result;
     }
-
+    
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(rect.size.height, rect.size.width), NO, 0);
     CGContextRotateCTM(UIGraphicsGetCurrentContext(), M_PI_2);
     CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0, -result.size.height);
-
+    
     [result drawInRect:rect];
-
+    
     result = UIGraphicsGetImageFromCurrentImageContext();
-
+    
     UIGraphicsEndImageContext();
-
+    
     return result;
 }
 
@@ -283,9 +317,9 @@
     NSString *scaleText = @(self.maxValue).description;
     
     CGSize size = [scaleText boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT)
-                                   options:NSStringDrawingUsesLineFragmentOrigin
-                                attributes:[self scaleTextAttributes]
-                                   context:nil].size;
+                                          options:NSStringDrawingUsesLineFragmentOrigin
+                                       attributes:[self scaleTextAttributes]
+                                          context:nil].size;
     
     return CGSizeMake(floor(size.width), floor(size.height));
 }

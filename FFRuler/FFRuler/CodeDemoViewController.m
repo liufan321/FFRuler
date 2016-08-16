@@ -31,6 +31,8 @@
     ruler.maxValue = 100;
     // 数值步长
     ruler.valueStep = 5;
+    // 设置默认值
+    ruler.selectedValue = 80;
     
     // 添加监听方法
     [ruler addTarget:self action:@selector(weightChanged:) forControlEvents:UIControlEventValueChanged];
