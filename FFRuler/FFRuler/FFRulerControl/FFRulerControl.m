@@ -161,7 +161,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
-    if (!scrollView.isDragging) {
+    if (!(scrollView.isDragging || scrollView.isTracking || scrollView.isDecelerating)) {
         return;
     }
     
