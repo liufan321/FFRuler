@@ -26,6 +26,10 @@
  */
 #define kMinorScaleDefaultLength    10.0
 /**
+ * 刻度尺背景颜色默认值
+ */
+#define kRulerDefaultBackgroundColor    ([UIColor clearColor])
+/**
  * 刻度颜色默认值
  */
 #define kScaleDefaultColor          ([UIColor lightGrayColor])
@@ -196,7 +200,7 @@
     }
     
     _rulerImageView.image = image;
-    _rulerImageView.backgroundColor = [UIColor yellowColor];
+    _rulerImageView.backgroundColor = self.rulerBackgroundColor;
     
     [_rulerImageView sizeToFit];
     _scrollView.contentSize = _rulerImageView.image.size;
@@ -390,6 +394,13 @@
         _minorScaleLength = kMinorScaleDefaultLength;
     }
     return _minorScaleLength;
+}
+
+- (UIColor *)rulerBackgroundColor {
+    if (_rulerBackgroundColor == nil) {
+        _rulerBackgroundColor = kRulerDefaultBackgroundColor;
+    }
+    return _rulerBackgroundColor;
 }
 
 - (UIColor *)scaleColor {

@@ -54,6 +54,11 @@ IB_DESIGNABLE
  * 小刻度长度，默认值 `10.0`
  */
 @property (nonatomic, assign) IBInspectable CGFloat minorScaleLength;
+
+/**
+ * 刻度尺背景颜色，默认为 `clearColor`
+ */
+@property (nonatomic, strong) IBInspectable UIColor *rulerBackgroundColor;
 /**
  * 刻度颜色，默认为 `lightGrayColor`
  */
