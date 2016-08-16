@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "FFRuler"
-  s.version      = "0.0.1"
+  s.version      = "0.0.3"
   s.summary      = "轻量级标尺控件"
   s.homepage     = "https://github.com/liufan321/FFRuler"
   s.license      = "MIT"

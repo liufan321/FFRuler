@@ -79,14 +79,12 @@
     return self;
 }
 
-- (void)didMoveToWindow {
-    [super didMoveToWindow];
-    
-    [self reloadRuler];
-}
-
 - (void)layoutSubviews {
     [super layoutSubviews];
+    
+    if (_rulerImageView.image == nil) {
+        [self reloadRuler];
+    }
     
     CGSize size = self.bounds.size;
     
