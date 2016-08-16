@@ -77,6 +77,35 @@
     [self reloadRuler];
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    CGSize size = self.bounds.size;
+    
+    if (_verticalScroll) {
+        _indicatorView.frame = CGRectMake(0, size.height * 0.5, self.indicatorLength, 1);
+    } else {
+        _indicatorView.frame = CGRectMake(size.width * 0.5, size.height - self.indicatorLength, 1, self.indicatorLength);
+    }
+    
+    // 设置滚动视图内容间距
+    CGSize textSize = [self maxValueTextSize];
+    if (_verticalScroll) {
+        CGFloat offset = size.height * 0.5 - textSize.width;
+        
+        _scrollView.contentInset = UIEdgeInsetsMake(offset, 0, offset, 0);
+    } else {
+        CGFloat offset = size.width * 0.5 - textSize.width;
+        
+        _scrollView.contentInset = UIEdgeInsetsMake(0, offset, 0, offset);
+    }
+}
+
+#pragma mark - 设置属性
+- (void)setIndicatorColor:(UIColor *)indicatorColor {
+    _indicatorView.backgroundColor = indicatorColor;
+}
+
 #pragma mark - 绘制标尺相关方法
 /**
  * 刷新标尺
@@ -206,10 +235,12 @@
     
     NSString *scaleText = @(self.maxValue).description;
     
-    return [scaleText boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT)
+    CGSize size = [scaleText boundingRectWithSize:CGSizeMake(MAXFLOAT, MAXFLOAT)
                                    options:NSStringDrawingUsesLineFragmentOrigin
                                 attributes:[self scaleTextAttributes]
                                    context:nil].size;
+    
+    return CGSizeMake(floor(size.width), floor(size.height));
 }
 
 /**
@@ -300,10 +331,10 @@
 }
 
 - (UIColor *)indicatorColor {
-    if (_indicatorColor == nil) {
-        _indicatorColor = kIndicatorDefaultColor;
+    if (_indicatorView.backgroundColor == nil) {
+        _indicatorView.backgroundColor = kIndicatorDefaultColor;
     }
-    return _indicatorColor;
+    return _indicatorView.backgroundColor;
 }
 
 - (CGFloat)indicatorLength {
